@@ -257,6 +257,7 @@ class TrackedObjectProcessor(threading.Thread):
                 if new_status != current_object_status[obj_name]:
                     current_object_status[obj_name] = new_status
                     self.client.publish(f"{self.topic_prefix}/{camera}/{obj_name}", new_status, retain=False)
+                    self.client.publish("BlueIris/admin", f"camera={camera}&trigger", retain=False)
                     # send the best snapshot over mqtt
                     best_frame = cv2.cvtColor(best_objects[obj_name]['frame'], cv2.COLOR_RGB2BGR)
                     ret, jpg = cv2.imencode('.jpg', best_frame)
